@@ -218,22 +218,13 @@ class MMP1251(Gamepad):
 
 
 class VincePad(Gamepad):
-    # This class must have self.axisNames with a map
-    # of numbers to capitalised strings. Follow the
-    # conventions the other classes use for generic
-    # axes, make up your own names for axes unique
-    # to your device.
-    # self.buttonNames needs the same treatment.
-    # Use python Gamepad.py to get the event mappings.
-    fullName = 'Enter the human readable name of the device here'
+    fullName = 'VincePad Controller'
 
     def __init__(self, joystickNumber = 0):
         Gamepad.__init__(self, joystickNumber)
         self.axisNames = {
             0: 'AXIS0',
-            1: 'AXIS1',
-            2: 'AXIS2',
-            3: 'AXIS3'
+            1: 'AXIS1'
         }
         self.buttonNames = {
             0: 'BUTTON0',
