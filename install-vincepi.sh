@@ -100,17 +100,27 @@ full_install()
 	echo "---------------------"
 	pinout
 
+	echo Creating Backup Directory...
+	sudo mkdir /etc/vincepi-backup
+
+	echo "Installing Python and it's dependencies..."
 	sudo apt install -y python3 # Needed for UI
 	python3 -m pip install pillow # Used for image rendering
+
+	echo "Installing unclutter and it's dependencies..."
+	sudo apt install unclutter
+
+	echo "Backing up X11 init config (xinitrc)"
+	sudo cp /etc/X11/xinit/xinitrc /etc/vincepi-backup/xinitrc-backup
+
+	echo "Configuring unclutter..."
+	echo -e "\n\nunclutter &" >> /etc/X11/xinit/xinitrc
 
 	echo Downloading Resources...
 	# Download images
 	sudo wget -O /etc/splash.png https://raw.githubusercontent.com/77Z/VincePi/master/splash.png
 	sudo wget -O /etc/Background.png https://raw.githubusercontent.com/77Z/VincePi/master/Background.png
 	sudo wget -O "/etc/VincePi Starting.png" "https://raw.githubusercontent.com/77Z/VincePi/master/VincePi Starting.png"
-
-	echo Creating Backup Directory...
-	sudo mkdir /etc/vincepi-backup
 
 	echo Backing up splash screen...
 	sudo cp /usr/share/plymouth/themes/pix/splash.png etc/vincepi-backup/splash-backup.png
@@ -119,13 +129,16 @@ full_install()
 	
 	echo Backing up boot config...
 	sudo cp /boot/config.txt /etc/vincepi-backup/boot-backup.txt
-	echo Disabling Rainbow Splash...
-	sudo echo "\n\ndisable_splash=1" >> /boot/config.txt
+	echo "Configuring boot (Remove Rainbow Splash, Disable Overscan, Set Screen Resoltion, Enables Audio, Enables HDMI hotplug)"
+	sudo echo -e "# http://rpf.io/configtxt\n\ndisable_overscan=1\n\nhdmi_force_hotplug=1\n\nhdmi_group=1\nhdmi_mode=4\n\ndtparam=audio=on\n\ndisable_splash=1"
+	#sudo echo "\n\ndisable_splash=1" >> /boot/config.txt
 	echo Backing up boot cmdline config...
 	sudo cp /boot/cmdline.txt /etc/vincepi-backup/boot-cmdline-backup.txt
 	echo Configuring boot...
 	echo " console=tty3 splash quiet plymouth.ignore-serial-consoles logo.nologo vt.global_cursor_default=0" >> /boot/cmdline.txt
 	echo Boot operations configured!
+
+	#echo Setting screen resolution...
 
 	
 
